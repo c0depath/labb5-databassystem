@@ -103,7 +103,10 @@ END;
 -- Uppgift 5
 -- Triggertest
 
-/* TRIGGERTEST = BEGIN DO_BANKKUND('691124-4478','Bo','Ek','qwe'); END; */
+/* TRIGGERTEST TESTA MED FEL LÖSENORD */
+BEGIN
+DO_BANKKUND('691124-4478','Bo','Ek','qwe'); 
+END;
 
 -------------------------Start copy and paste---------------------------------
 BEGIN
@@ -170,6 +173,29 @@ THEN
 RETURN 0;
 END;
 
+SELECT LOGGA_IN('pnr', 'lösenord')
+FROM DUAL;
+
+/* Testar med fel lösenord */
+BEGIN
+DO LOGGA_IN('630214-1213', 'fellösenord')
+COMMIT;
+END;
+
+/* Testar med fel personnummer */
+BEGIN
+DO LOGGA_IN('999999-9999', '123456')
+COMMIT;
+END;
+
+/* Testar med korrekt parametrar */
+BEGIN
+DO LOGGA_IN('630214-1213', '123456')
+COMMIT;
+END;
+
+
+
 -- Uppgift 8
 CREATE OR REPLACE FUNCTION GET_SALDO(
     P_KNR IN KONTO.KNR%TYPE) 
@@ -188,6 +214,22 @@ THEN
 RETURN -1;
 END;
 
+/* Verifierar innehållet i tabellen KONTO */
+SELECT * FROM KONTO
+
+/* Testar med korrekt kontonummer */
+BEGIN
+DO GET_SALDO('5899')
+COMMIT;
+END;
+
+/* Testar med fel kontonummer */
+BEGIN
+DO GET_SALDO('1234')
+COMMIT;
+END;
+
+
 -- Uppgift 9
 CREATE OR REPLACE FUNCTION GET_BEHÖRIGHET(
     p_pnr IN KONTOÄGARE.PNR%TYPE,
@@ -202,6 +244,28 @@ FROM KONTOÄGARE
 WHERE PNR = P_PNR 
 AND KNR = P_KNR;
 RETURN V_SUCCESS;
+END;
+
+/* Verifierar innehållet i tabellen KONTOÄGARE */
+SELECT * FROM KONTOÄGARE
+
+
+/* Testar med fel personnummer */
+BEGIN
+DO('999999-9999', '5899')
+COMMIT;
+END;
+
+/* Testar med fel kontonummer */
+BEGIN
+DO('990309-8957', '1111')
+COMMIT;
+END;
+
+/* Testar med rätt parametrar */
+BEGIN
+DO('990309-8957', '5899')
+COMMIT;
 END;
 
 -- Uppgift 10
@@ -437,3 +501,4 @@ END;
 SELECT * FROM ÖVERFÖRING;
 
 SELECT * FROM KONTO;
+
