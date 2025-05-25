@@ -177,22 +177,16 @@ SELECT LOGGA_IN('pnr', 'lösenord')
 FROM DUAL;
 
 /* Testar med fel lösenord */
-BEGIN
-DO LOGGA_IN('630214-1213', 'fellösenord')
-COMMIT;
-END;
+SELECT LOGGA_IN('630214-1213', 'fellösenord') 
+FROM DUAL;
 
 /* Testar med fel personnummer */
-BEGIN
-DO LOGGA_IN('999999-9999', '123456')
-COMMIT;
-END;
+SELECT LOGGA_IN('999999-9999', 'bertil')
+FROM DUAL;
 
 /* Testar med korrekt parametrar */
-BEGIN
-DO LOGGA_IN('630214-1213', '123456')
-COMMIT;
-END;
+SELECT LOGGA_IN('630214-1213', 'bertil')
+FROM DUAL;
 
 
 
@@ -218,16 +212,13 @@ END;
 SELECT * FROM KONTO
 
 /* Testar med korrekt kontonummer */
-BEGIN
-DO GET_SALDO('5899')
-COMMIT;
-END;
+SELECT GET_SALDO('5899')
+FROM DUAL;
+
 
 /* Testar med fel kontonummer */
-BEGIN
-DO GET_SALDO('1234')
-COMMIT;
-END;
+SELECT GET_SALDO('1234')
+FROM DUAL;
 
 
 -- Uppgift 9
@@ -249,24 +240,17 @@ END;
 /* Verifierar innehållet i tabellen KONTOÄGARE */
 SELECT * FROM KONTOÄGARE
 
-
 /* Testar med fel personnummer */
-BEGIN
-DO('999999-9999', '5899')
-COMMIT;
-END;
+SELECT GET_BEHÖRIGHET('999999-9999', '5899')
+FROM DUAL;
 
 /* Testar med fel kontonummer */
-BEGIN
-DO('990309-8957', '1111')
-COMMIT;
-END;
+SELECT GET_BEHÖRIGHET('990309-8957', '1111')
+FROM DUAL;
 
 /* Testar med rätt parametrar */
-BEGIN
-DO('990309-8957', '5899')
-COMMIT;
-END;
+SELECT GET_BEHÖRIGHET('990309-8957', '5899')
+FROM DUAL;
 
 -- Uppgift 10
 CREATE OR REPLACE TRIGGER AIFER_INSÄTTING
